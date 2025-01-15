@@ -82,16 +82,42 @@
           margin-bottom: 5px;
           color: #555;
       }
+
+      .rounded-input {
+          width: 300px;
+          height: 40px;
+          border: 2px solid #ccc;
+          border-radius: 20px; /* Makes the borders round */
+          padding: 5px 15px;
+          outline: none;
+          transition: border-color 0.3s ease;
+          font-size: 22px;
+          font-weight: bolder;
+          color: goldenrod;
+      }
+      .title{
+          font-size:40px;
+          font-weight: bolder;
+          color: goldenrod;
+      }
+      .rounded-input:focus {
+          border-color: #007bff; /* Change border color on focus */
+          box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add focus effect */
+          font-size: 22px;
+          font-weight: bolder;
+          color: goldenrod;
+      }
   </style>
 </head>
 <body>
 <div id="app" class="counter-app">
-  <h1>Your Money</h1>
-  <div class="count">{{ count }} $</div>
+  <h1 class="title">Your Money</h1>
+  <input type="number" v-model="main_value" class="rounded-input">
+  <div class="count">{{ count.toLocaleString() }} $</div>
   <button class="increment" @click="increment">Increment</button>
   <button class="decrement" @click="decrement">Decrement</button>
   <button class="reset" @click="reset">Reset</button>
-  <div class="history">
+  <div class="history" v-if="false">
     <h2>History:</h2>
     <ul>
       <li v-for="(item, index) in history" :key="index">
@@ -107,26 +133,27 @@
         data: {
             count: 0,
             history: [],
+            main_value: 1
         },
         mounted() {
             // Load history from cookies if available
             const savedHistory = Cookies.get('counterHistory');
             const count = Cookies.get('money');
+            this.count = count == undefined ? 3333 : parseInt(count);
             console.log(count)
             if (savedHistory) {
                 this.history = JSON.parse(savedHistory);
-                this.count = count;
             }
         },
         methods: {
             increment() {
-                this.count++;
+                this.count += parseInt(this.main_value);
                 Cookies.set('money', (this.count).toString(), { expires: 7 });
                 this.addToHistory(this.count);
             },
             decrement() {
                 if (this.count > 0) {
-                    this.count--;
+                    this.count -= this.main_value;;
                     Cookies.set('money', (this.count).toString(), { expires: 7 });
                     this.addToHistory(this.count);
                 }
@@ -134,8 +161,8 @@
             reset() {
                 let res = confirm("Do you want to reset ?")
                 if (res == true){
-                    this.count = 0;
-                    Cookies.set('money', '0', { expires: 7 });
+                    this.count = 3333;
+                    Cookies.set('money', '3333', { expires: 7 });
                     Cookies.set('counterHistory', [], { expires: 7 });
                     this.history = []
                 }
