@@ -2,53 +2,154 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Money</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+  <style>
+      body {
+          font-family: Arial, sans-serif;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          margin: 0;
+          background-color: #f4f4f9;
+      }
+      .counter-app {
+          text-align: center;
+          background: white;
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+          width: 500px;
+      }
+      h1 {
+          margin: 0 0 20px;
+          font-size: 24px;
+      }
+      .count {
+          font-size: 48px;
+          margin: 20px 0;
+          color: #333;
+      }
+      button {
+          margin: 5px;
+          padding: 10px 20px;
+          font-size: 16px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+      }
+      button.increment {
+          background-color: #4caf50;
+          color: white;
+      }
+      button.increment:hover {
+          background-color: #45a049;
+      }
+      button.decrement {
+          background-color: #f44336;
+          color: white;
+      }
+      button.decrement:hover {
+          background-color: #e53935;
+      }
+      button.reset {
+          background-color: #2196f3;
+          color: white;
+      }
+      button.reset:hover {
+          background-color: #1e88e5;
+      }
+      .history {
+          margin-top: 20px;
+          text-align: left;
+          height: 500px;
+          overflow: scroll;
+      }
+      .history h2 {
+          font-size: 18px;
+          margin-bottom: 10px;
+      }
+      .history ul {
+          list-style-type: none;
+          padding: 0;
+      }
+      .history li {
+          font-size: 14px;
+          margin-bottom: 5px;
+          color: #555;
+      }
+  </style>
 </head>
 <body>
-<div id="app">
-  <center>
-    <div
-      v-for="(item, index) in 10"
-    >
-      <h1
-        v-if="age < 18"
-        :style="`font-size: ${age}px`"
-      >You are kid: {{ age }}</h1>
-      <h1
-        v-if="age >= 18"
-        :style="`font-size: ${age}px`"
-      >You are adult {{ age}}</h1>
-    </div>
-
-    <input @click="degreesAge()"
-           type="button"
-           value="degrees"
-    >
-    <input @click="ingressAge()"
-           type="button"
-           value="ingress"
-    >
-  </center>
+<div id="app" class="counter-app">
+  <h1>Your Money</h1>
+  <div class="count">{{ count }} $</div>
+  <button class="increment" @click="increment">Increment</button>
+  <button class="decrement" @click="decrement">Decrement</button>
+  <button class="reset" @click="reset">Reset</button>
+  <div class="history">
+    <h2>History:</h2>
+    <ul>
+      <li v-for="(item, index) in history" :key="index">
+        {{ item }}
+      </li>
+    </ul>
+  </div>
 </div>
-</body>
-<script src="vue_cdn.js"></script>
+
 <script>
-    var app = new Vue({
+    new Vue({
         el: '#app',
-        created(){},
         data: {
-            message: 'Hello ST15',
-            color: 'blue',
-            age: 10
+            count: 0,
+            history: [],
+        },
+        mounted() {
+            // Load history from cookies if available
+            const savedHistory = Cookies.get('counterHistory');
+            const count = Cookies.get('money');
+            console.log(count)
+            if (savedHistory) {
+                this.history = JSON.parse(savedHistory);
+                this.count = count;
+            }
         },
         methods: {
-            ingressAge() {
-                this.age += 1
+            increment() {
+                this.count++;
+                Cookies.set('money', (this.count).toString(), { expires: 7 });
+                this.addToHistory(this.count);
             },
-            degreesAge() {
-                this.age -= 1
-            }
-        }
-    })
+            decrement() {
+                if (this.count > 0) {
+                    this.count--;
+                    Cookies.set('money', (this.count).toString(), { expires: 7 });
+                    this.addToHistory(this.count);
+                }
+            },
+            reset() {
+                let res = confirm("Do you want to reset ?")
+                if (res == true){
+                    this.count = 0;
+                    Cookies.set('money', '0', { expires: 7 });
+                    Cookies.set('counterHistory', [], { expires: 7 });
+                    this.history = []
+                }
+            },
+            addToHistory(value) {
+                this.history.push(`Count: ${value} at ${new Date().toLocaleString()}`);
+                this.saveHistory();
+            },
+            saveHistory() {
+                // Save history to cookies
+                Cookies.set('counterHistory', JSON.stringify(this.history), { expires: 7 });
+            },
+        },
+    });
 </script>
+</body>
 </html>
