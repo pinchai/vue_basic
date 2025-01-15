@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+      .calculator {
+          max-width: 400px;
+          margin: 50px auto;
+      }
+      .calculator-screen {
+          height: 60px;
+          text-align: right;
+          font-size: 24px;
+          padding-right: 10px;
+      }
+      .btn-lg {
+          font-size: 20px;
+      }
+  </style>
+</head>
+<body>
+<div id="app" class="container calculator">
+  <div class="card">
+    <div class="card-body">
+      <!-- Display Screen -->
+      <input
+        type="text"
+        class="form-control calculator-screen"
+        id="display"
+        disabled
+        v-model="tpm_value"
+      >
+      <!-- Buttons -->
+      <div class="row mt-3">
+        <div class="col-3 mb-2">
+          <button @click="getNumber(7)" class="btn btn-light btn-lg w-100">7</button>
+        </div>
+        <div class="col-3 mb-2">
+          <button @click="getNumber(8)" class="btn btn-light btn-lg w-100">8</button>
+        </div>
+        <div class="col-3 mb-2">
+          <button @click="getNumber(9)" class="btn btn-light btn-lg w-100">9</button>
+        </div>
+        <div class="col-3 mb-2">
+          <button class="btn btn-warning btn-lg w-100">/</button>
+        </div>
+
+        <div class="col-3 mb-2">
+          <button @click="getNumber(4)" class="btn btn-light btn-lg w-100">4</button>
+        </div>
+        <div class="col-3 mb-2">
+          <button @click="getNumber(5)" class="btn btn-light btn-lg w-100">5</button>
+        </div>
+        <div class="col-3 mb-2">
+          <button  @click="getNumber(6)" class="btn btn-light btn-lg w-100">6</button>
+        </div>
+        <div class="col-3 mb-2">
+          <button class="btn btn-warning btn-lg w-100">*</button>
+        </div>
+
+        <div class="col-3 mb-2">
+          <button @click="getNumber(1)" class="btn btn-light btn-lg w-100">1</button>
+        </div>
+        <div class="col-3 mb-2">
+          <button @click="getNumber(2)" class="btn btn-light btn-lg w-100">2</button>
+        </div>
+        <div class="col-3 mb-2">
+          <button @click="getNumber(3)" class="btn btn-light btn-lg w-100">3</button>
+        </div>
+        <div class="col-3 mb-2">
+          <button class="btn btn-warning btn-lg w-100">-</button>
+        </div>
+
+        <div class="col-3 mb-2">
+          <button @click="getNumber(0)" class="btn btn-light btn-lg w-100">0</button>
+        </div>
+        <div class="col-3 mb-2"><button class="btn btn-light btn-lg w-100">.</button></div>
+        <div class="col-3 mb-2"><button class="btn btn-success btn-lg w-100">=</button></div>
+        <div class="col-3 mb-2"><button class="btn btn-warning btn-lg w-100">+</button></div>
+
+        <div class="col-12 mb-2">
+          <button @click="clearAll()" class="btn btn-danger btn-lg w-100">Clear</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="vue_cdn.js"></script>
+</body>
+<script>
+    var app = new Vue({
+        el: '#app',
+        created(){},
+        data: {
+            element: [],
+            tpm_value: ''
+        },
+        methods: {
+            getNumber(number){
+                this.tpm_value+=number
+            },
+            clearAll(){
+                this.tpm_value = ''
+                this.element = []
+            }
+        }
+    })
+</script>
+</html>

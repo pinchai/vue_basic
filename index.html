@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div id="app">
+  <center>
+    <div
+      v-for="(item, index) in 10"
+    >
+      <h1
+        v-if="age < 18"
+        :style="`font-size: ${age}px`"
+      >You are kid: {{ age }}</h1>
+      <h1
+        v-if="age >= 18"
+        :style="`font-size: ${age}px`"
+      >You are adult {{ age}}</h1>
+    </div>
+
+    <input @click="degreesAge()"
+           type="button"
+           value="degrees"
+    >
+    <input @click="ingressAge()"
+           type="button"
+           value="ingress"
+    >
+  </center>
+</div>
+</body>
+<script src="vue_cdn.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        created(){},
+        data: {
+            message: 'Hello ST15',
+            color: 'blue',
+            age: 10
+        },
+        methods: {
+            ingressAge() {
+                this.age += 1
+            },
+            degreesAge() {
+                this.age -= 1
+            }
+        }
+    })
+</script>
+</html>
